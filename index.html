@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valor de la tarjeta</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f9f9f9;
+            text-align: center;
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        p {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid rgba(0, 0, 0, 0.2);
+            margin: 20px 0;
+        }
+
+        .banco {
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card" id="tarjeta">
+        <h1 id="titulo">Valor de la tarjeta al dia de la fecha:</h1>
+        <p id="valorTotal"></p>
+        <hr>
+
+        <div class="banco">
+            <strong>MERCADO PAGO:</strong><br>
+            ALIAS: e.j.garcia15<br>
+            CVU: 0000003100013330968272<br>
+            NOMBRE: EMILIANO GARCIA
+        </div>
+    </div>
+
+    <div class="card" id="regalo" style="display:none;">
+        <h1>¡Gracias por tu regalo!</h1>
+        <p>Instrucciones o mensaje especial aquí.</p>
+    </div>
+
+    <script>
+
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        const tipo = getQueryParam("tipo");
+
+        if (tipo === "tarjeta") {
+            const valorBase = 80000;
+            const fechaInicio = new Date(2025, 2, 1); // marzo (mes 2 porque enero=0)
+
+            async function calcularValor() {
+                // leer ipc.json
+                const resp = await fetch("ipc.json");
+                const ipcData = await resp.json();
+                // fecha de hoy
+                const hoy = new Date();
+                let monto = valorBase;
+                
+                // recorrer desde marzo 2025 hasta hoy
+                let fecha = new Date(fechaInicio);
+                while (fecha <= hoy) {
+                    const key = `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, "0")}`;
+                    if (ipcData[key]) {
+                        monto *= (1 + ipcData[key] / 100);
+                    }
+                    fecha.setMonth(fecha.getMonth() + 1);
+                }
+                return Math.round(monto);
+            }
+            window.addEventListener('DOMContentLoaded', async () => {
+                const total = await calcularValor();
+                const dia = String(new Date().getDate()).padStart(2, '0');
+                const mes = String(new Date().getMonth() + 1).padStart(2, '0');
+                const anio = new Date().getFullYear();
+                const fechaFormateada = `${dia}/${mes}/${anio}`;
+                document.getElementById('titulo').innerText =
+                    `Valor de la tarjeta hoy (${fechaFormateada}):`;
+                document.getElementById('valorTotal').innerText = `$${total.toLocaleString("es-AR")}`;
+            });
+        } else if (tipo === "regalo") {
+            document.getElementById("tarjeta").style.display = "none";
+            document.getElementById("regalo").style.display = "block";
+        } else {
+            // default si no hay parámetro
+            document.getElementById("tarjeta").style.display = "block";
+            document.getElementById("regalo").style.display = "none";
+        }
+
+
+
+    </script>
+</body>
+
+</html>
