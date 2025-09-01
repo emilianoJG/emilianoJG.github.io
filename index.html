@@ -49,6 +49,7 @@
             line-height: 1.5;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 
 <body>
@@ -56,20 +57,21 @@
         <h1 id="titulo">Valor de la tarjeta al dia de la fecha:</h1>
         <p id="valorTotal"></p>
         <hr>
-
         <div class="banco">
             <strong>MERCADO PAGO:</strong><br>
-            ALIAS: e.j.garcia15<br>
-            CVU: 0000003100013330968272<br>
-            NOMBRE: EMILIANO JESUS GARCIA
+            <strong>ALIAS:</strong> e.j.garcia15<br>
+            <strong>CVU:</strong> 0000003100013330968272<br>
+            <strong>NOMBRE:</strong> EMILIANO JESUS GARCIA
         </div>
     </div>
 
-    <div class="card" id="regalo" style="display:none;">
+    <div class="card" id="regalo" style="display:none; text-align:center;">
+        <i class="fas fa-gift" style="font-size: 2rem; color: #ff6347;"></i>
+        <h1 id="titulo">Dato Bancario para Regalos:</h1>
         <div class="banco">
             <strong>UALA:</strong><br>
-            ALIAS: EMI.MARI.CASORIO.26<br>
-            NOMBRE: EMILIANO JESUS GARCIA
+            <strong>ALIAS:</strong> EMI.MARI.CASORIO.26<br>
+            <strong>NOMBRE:</strong> EMILIANO JESUS GARCIA
         </div>
     </div>
 
@@ -123,9 +125,6 @@
             document.getElementById("tarjeta").style.display = "block";
             document.getElementById("regalo").style.display = "none";
         }
-
-
-
     </script>
 </body>
 
