@@ -89,8 +89,7 @@
 
         if (tipo === "tarjeta") {
             const valorBase = 89700;
-            const fechaInicio = new Date(2025, 2, 1); // marzo (mes 2 porque enero=0)
-
+            const fechaInicio = new Date(2025, 2, 1);
             async function calcularValor() {
                 // leer ipc.json
                 const resp = await fetch("ipc.json");
@@ -98,7 +97,6 @@
                 // fecha de hoy
                 const hoy = new Date();
                 let monto = valorBase;
-
                 // recorrer desde marzo 2025 hasta hoy
                 let fecha = new Date(fechaInicio);
                 while (fecha <= hoy) {
@@ -112,13 +110,14 @@
             }
             window.addEventListener('DOMContentLoaded', async () => {
                 const total = await calcularValor();
+                const totalRedondeado = Math.ceil(total / 1000) * 1000;
                 const dia = String(new Date().getDate()).padStart(2, '0');
                 const mes = String(new Date().getMonth() + 1).padStart(2, '0');
                 const anio = new Date().getFullYear();
                 const fechaFormateada = `${dia}/${mes}/${anio}`;
                 document.getElementById('titulo').innerText =
                     `Valor de la tarjeta hoy (${fechaFormateada}):`;
-                document.getElementById('valorTotal').innerText = `$${total.toLocaleString("es-AR")}`;
+                document.getElementById('valorTotal').innerText = `$${totalRedondeado.toLocaleString("es-AR")}`;
             });
         } else if (tipo === "regalo") {
             document.getElementById("tarjeta").style.display = "none";
